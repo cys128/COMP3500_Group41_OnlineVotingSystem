@@ -11,4 +11,12 @@ An online voting system developed for COMP 35000SEF
 * **Student Name:** Chen Yuk San (SID: 14239843)
 
 ## How to run  it
-Open  the file VotingSystem\html\home
+Open  the file In  VotingSystem\html\home
+
+* Preset Administrator:
+`Username: admin`
+`Password: admin123`
+
+* Preset Voter:
+`Username: user1`
+`Password: 123456`

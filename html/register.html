@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration - Hong Kong Metropolitan University Voting System</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="../jquery/jquery-3.7.0.js"></script>
+    <script type="text/javascript" src="../js/register.js"></script>
+    <style>
+        .register-container {
+            max-width: 500px;
+            margin: 30px auto;
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .register-header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .register-header p {
+            color: #666;
+        }
+        
+        .form-icon {
+            position: relative;
+        }
+        
+        .form-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+        
+        .form-icon input {
+            padding-left: 45px;
+        }
+        
+        .verify-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .verify-group input {
+            flex: 1;
+        }
+        
+        #imgVerifyCode {
+            font-family: monospace;
+            font-size: 24px;
+            font-weight: bold;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            min-width: 100px;
+            text-align: center;
+            letter-spacing: 5px;
+        }
+        
+        .register-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+        
+        .register-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .register-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .errorClass {
+            color: var(--danger-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
+        
+        .admin-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .admin-section h3 {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <div class="header-top">
+                <div class="app-title">
+                    <h1><i class="fas fa-vote-yea"></i> Hong Kong Metropolitan University Voting System</h1>
+                    <p>Campus Voting Platform</p>
+                </div>
+                <div class="nav-menu">
+                    <a href="home.html" class="nav-btn">
+                        <i class="fas fa-home"></i> Return to Home
+                    </a>
+                    <a href="login.html" class="nav-btn secondary">
+                        <i class="fas fa-sign-in-alt"></i> User Login
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="register-container">
+            <div class="card">
+                <div class="register-header">
+                    <h1><i class="fas fa-user-plus"></i> User Registration</h1>
+                    <p>Create your voting system account</p>
+                </div>
+
+                <form id="registerForm">
+                    <div class="form-group form-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="userName" id="username" class="form-control" placeholder="Username (3-20 characters)" required>
+                    </div>
+                    <label class="errorClass" id="usernameError"></label>
+
+                    <div class="form-group form-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="loginPassword" id="loginpassword" class="form-control" placeholder="Password (6-30 characters)" required>
+                    </div>
+                    <label class="errorClass" id="loginpasswordError"></label>
+
+                    <div class="form-group form-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="reLoginPassword" id="reloginpassword" class="form-control" placeholder="Confirm Password" required>
+                    </div>
+                    <label class="errorClass" id="reloginpasswordError"></label>
+
+                    <div class="admin-section">
+                        <h3><i class="fas fa-user-shield"></i> Admin Registration</h3>
+                        <div class="form-group">
+                            <input type="text" name="adminCode" id="adminCode" class="form-control" placeholder="Admin Invitation Code (optional)">
+                        </div>
+                        <label class="errorClass" id="adminCodeError"></label>
+                        <small style="color: #666;">Leave empty for regular users. Contact system admin for invitation code if admin privileges needed</small>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="verify-group">
+                            <input type="text" name="verifyCode" id="verifycode" class="form-control" placeholder="Verification Code" required>
+                            <div id="imgVerifyCode" onclick="changeVerifyCode()"></div>
+                        </div>
+                    </div>
+                    <label class="errorClass" id="verifycodeError"></label>
+
+                    <div class="form-group">
+                        <button type="button" id="submitbuttion" class="btn btn-primary btn-block" onclick="register()">
+                            <i class="fas fa-user-plus"></i> Register Now
+                        </button>
+                    </div>
+
+                    <div class="register-footer">
+                        <p>Already have an account? <a href="login.html">Login Now</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="notificationContainer"></div>
+
+    <script>
+        $(document).ready(function() {
+            createVerifyCode();
+            
+            $('#registerForm').submit(function(e) {
+                e.preventDefault();
+                register();
+            });
+        });
+    </script>
+</body>
+</html>

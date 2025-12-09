@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting Results - Hong Kong Metropolitan University Voting System</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .results-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-card p {
+            color: var(--primary-color);
+            font-size: 32px;
+            font-weight: 700;
+        }
+        
+        .results-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .vote-progress-container {
+            min-width: 200px;
+        }
+        
+        .vote-progress {
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        
+        .vote-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+        
+        .vote-info {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .rank-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); }
+        .rank-2 { background: linear-gradient(135deg, #C0C0C0, #A9A9A9); }
+        .rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); }
+        .rank-other { background: linear-gradient(135deg, var(--info-color), #4BC0C0); }
+        
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        .no-data i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+        
+        .candidate-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        
+        .candidate-info {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <div class="header-top">
+                <div class="app-title">
+                    <h1><i class="fas fa-chart-bar"></i> Voting Results</h1>
+                    <p>Real-time Voting Statistics</p>
+                </div>
+                <div class="nav-menu">
+                    <a href="home.html" class="nav-btn">
+                        <i class="fas fa-home"></i> Return to Home
+                    </a>
+                    <a href="instructions.html" class="nav-btn secondary">
+                        <i class="fas fa-info-circle"></i> Voting Instructions
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="results-summary">
+            <div class="stat-card">
+                <h3>Total Votes</h3>
+                <p id="totalVotes">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Candidates Count</h3>
+                <p id="totalCandidates">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Highest Votes</h3>
+                <p id="maxVotes">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Average Votes</h3>
+                <p id="avgVotes">0</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="results-controls">
+                <h2 class="card-title"><i class="fas fa-list-ol"></i> Voting Ranking</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="nav-btn" onclick="sortBy('id')">
+                        <i class="fas fa-sort-numeric-up"></i> Sort by ID
+                    </button>
+                    <button class="nav-btn secondary" onclick="sortBy('vote-asc')">
+                        <i class="fas fa-sort-amount-up"></i> Votes Ascending
+                    </button>
+                    <button class="nav-btn" onclick="sortBy('vote-desc')">
+                        <i class="fas fa-sort-amount-down"></i> Votes Descending
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table" id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">Rank</th>
+                            <th style="min-width: 150px;">Candidate</th>
+                            <th>College</th>
+                            <th style="min-width: 200px;">Voting Progress</th>
+                            <th style="width: 100px;">Votes</th>
+                            <th style="width: 80px;">Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                        <!-- Data will be populated via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="noResults" class="no-data" style="display: none;">
+                <i class="fas fa-users-slash"></i>
+                <h3>No Voting Data</h3>
+                <p>No votes yet, go cast your valuable vote!</p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 30px;">
+            <h2 class="card-title"><i class="fas fa-chart-pie"></i> Voting Distribution Chart</h2>
+            <div id="voteChart" style="height: 400px;">
+                <p class="text-center">Generating voting distribution chart...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/voteresult.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initVoteResults();
+            
+            setInterval(initVoteResults, 30000);
+        });
+    </script>
+</body>
+</html>

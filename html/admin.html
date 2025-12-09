@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Backend - Voting System</title>
+    
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="../jquery/jquery-3.7.0.js"></script>
+    <script type="text/javascript" src="../js/utils.js"></script>
+    <script type="text/javascript" src="../js/admin.js"></script>
+    <script type="text/javascript" src="../js/event-manager.js"></script>
+
+    <style>
+    .confirm-delete-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+    }
+    
+    .confirm-delete-content {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .confirm-delete-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+    
+    .status-active {
+        color: #4CAF50;
+        font-weight: bold;
+    }
+    
+    .status-pending {
+        color: #FF9800;
+        font-weight: bold;
+    }
+    
+    .status-ended {
+        color: #F44336;
+        font-weight: bold;
+    }
+    
+    .btn-activate, .btn-view-candidates, .btn-delete-event {
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: opacity 0.3s;
+    }
+    
+    .btn-activate {
+        background: linear-gradient(to right, #00b09b, #96c93d);
+        color: white;
+    }
+    
+    .btn-view-candidates {
+        background: linear-gradient(to right, #36A2EB, #4BC0C0);
+        color: white;
+    }
+    
+    .btn-delete-event {
+        background: linear-gradient(to right, #ff416c, #ff4b2b);
+        color: white;
+    }
+    
+    .btn-activate:hover, .btn-view-candidates:hover, .btn-delete-event:hover {
+        opacity: 0.9;
+    }
+    
+    .btn-activate:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+</style>
+</head>
+<body>
+    <div class="admin-header">
+        <h1><i class="fas fa-tachometer-alt"></i> Voting System Admin Backend</h1>
+        <div class="user-info">
+            <span id="adminUsername"></span>
+            <a href="javascript:logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="javascript:goToHomePage()"><i class="fas fa-home"></i> Return to Home</a>
+        </div>
+    </div>
+    
+    <div class="admin-container">
+        <div class="sidebar">
+            <ul class="admin-menu">
+                <li class="menu-item active" onclick="showSection('dashboard')">
+                    <a href="javascript:void(0)">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <li class="menu-item" onclick="showSection('createEvent')">
+                    <a href="javascript:void(0)">
+                        <i class="fas fa-calendar-plus"></i> Create Voting Event
+                    </a>
+                </li>
+                <li class="menu-item" onclick="showSection('manageEvents')">
+                    <a href="javascript:void(0)">
+                        <i class="fas fa-calendar-alt"></i> Manage Voting Events
+                    </a>
+                </li>
+                <li class="menu-item" onclick="showSection('manageCandidates')">
+                    <a href="javascript:void(0)">
+                        <i class="fas fa-users"></i> Manage Candidates
+                    </a>
+                </li>
+                <li class="menu-item" onclick="showSection('monitorVotes')">
+                    <a href="javascript:void(0)">
+                        <i class="fas fa-chart-line"></i> Real-time Monitoring
+                    </a>
+                </li>
+                <li class="menu-item" onclick="showSection('viewResults')">
+                    <a href="javascript:void(0)">
+                        <i class="fas fa-chart-bar"></i> View Results
+                    </a>
+                </li>
+                <li class="menu-item" onclick="showSection('voteRecords')">
+                    <a href="javascript:void(0)">
+                        <i class="fas fa-history"></i> Voting Records
+                    </a>
+                </li>
+                <li class="menu-item" onclick="showSection('userManagement')">
+                    <a href="javascript:void(0)">
+                        <i class="fas fa-user-cog"></i> User Management
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <div id="dashboard" class="section active">
+                <h2><i class="fas fa-tachometer-alt"></i> System Overview</h2>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h3>Active Voting Events</h3>
+                        <p id="activeEvents">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Votes</h3>
+                        <p id="totalVotes">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Registered Users</h3>
+                        <p id="totalUsers">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Today's Votes</h3>
+                        <p id="todayVotes">0</p>
+                    </div>
+                </div>
+                
+                <div class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button class="btn-submit" onclick="showSection('createEvent')">
+                            <i class="fas fa-plus"></i> Create New Vote
+                        </button>
+                        <button class="btn-export" onclick="showSection('viewResults')">
+                            <i class="fas fa-chart-bar"></i> View Results
+                        </button>
+                        <button class="btn-refresh" onclick="refreshMonitor()">
+                            <i class="fas fa-sync-alt"></i> Refresh Data
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h3><i class="fas fa-info-circle"></i> System Information</h3>
+                    <p>Current Time: <span id="currentTime"></span></p>
+                    <p>Browser: <span id="browserInfo"></span></p>
+                    <p>Data Storage: <span id="storageStatus"></span></p>
+                </div>
+            </div>
+            
+            <div id="createEvent" class="section">
+                <h2><i class="fas fa-calendar-plus"></i> Create Voting Event</h2>
+                <form id="eventForm" class="admin-form">
+                    <div class="form-group">
+                        <label for="eventTitle">Event Title:</label>
+                        <input type="text" id="eventTitle" name="eventTitle" placeholder="Enter voting event title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDescription">Event Description:</label>
+                        <textarea id="eventDescription" name="eventDescription" rows="4" placeholder="Enter voting event description"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="startTime">Start Time:</label>
+                            <input type="datetime-local" id="startTime" name="startTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="endTime">End Time:</label>
+                            <input type="datetime-local" id="endTime" name="endTime" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="maxVotesPerUser">Max Votes per User:</label>
+                        <input type="number" id="maxVotesPerUser" name="maxVotesPerUser" value="10" min="1" max="100">
+                        <small>Set maximum votes per user for this event</small>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-save"></i> Create Event
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div id="manageEvents" class="section">
+                <h2><i class="fas fa-calendar-alt"></i> Manage Voting Events</h2>
+                
+                <div class="events-list">
+                    <div class="admin-form" style="margin-bottom: 20px;">
+                        <h3>Voting Events List</h3>
+                        <p style="color: #666; margin-bottom: 15px;">Manage all voting events, can delete unnecessary events.</p>
+                    </div>
+                    
+                    <table id="eventsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Event Title</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Status</th>
+                                <th>Candidates Count</th>
+                                <th>Total Votes</th>
+                                <th>Created Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Events list will be populated via JavaScript -->
+                        </tbody>
+                    </table>
+                    
+                    <div id="noEventsMessage" style="display: none; text-align: center; padding: 40px; color: #666;">
+                        <i class="fas fa-calendar-times" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <h3>No Voting Events</h3>
+                        <p>No voting events created yet</p>
+                        <button class="btn-submit" onclick="showSection('createEvent')" style="margin-top: 15px;">
+                            <i class="fas fa-plus"></i> Create Voting Event
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="manageCandidates" class="section">
+                <h2><i class="fas fa-users"></i> Manage Candidates</h2>
+                <div class="candidate-form">
+                    <h3>Add/Edit Candidate</h3>
+                    <form id="candidateForm" class="admin-form">
+                        <div class="form-group">
+                            <label for="candidateName">Candidate Name:</label>
+                            <input type="text" id="candidateName" name="candidateName" placeholder="Enter candidate name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="candidateCollege">College:</label>
+                            <input type="text" id="candidateCollege" name="candidateCollege" placeholder="Enter candidate's college" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="candidateDescription">Candidate Description:</label>
+                            <textarea id="candidateDescription" name="candidateDescription" rows="3" placeholder="Enter candidate description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventSelect">Select Voting Event:</label>
+                            <select id="eventSelect" name="eventSelect" required>
+                                <option value="">Select voting event</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-user-plus"></i> Add Candidate
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                
+            </div>
+            
+            <div id="monitorVotes" class="section">
+                <h2><i class="fas fa-chart-line"></i> Real-time Vote Monitoring</h2>
+                <div class="monitor-controls">
+                    <select id="monitorEventSelect" onchange="loadEventResults(this.value)">
+                        <option value="">Select voting event</option>
+                    </select>
+                    <button onclick="refreshMonitor()" class="btn-refresh">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                
+                <div class="real-time-stats">
+                    <div class="stat-item">
+                        <span>Total Votes:</span>
+                        <span id="realTimeTotalVotes">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Real-time Voting Rate:</span>
+                        <span id="voteRate">0</span> votes/hour
+                    </div>
+                    <div class="stat-item">
+                        <span>Current Active Event:</span>
+                        <span id="currentActiveEventName">Not Set</span>
+                    </div>
+                </div>
+                
+                <div id="monitorChart" class="chart-container">
+                    <canvas id="votesChart"></canvas>
+                </div>
+                
+                <div class="recent-votes">
+                    <h3>Recent Voting Records</h3>
+                    <table id="recentVotesTable">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Voter</th>
+                                <th>Candidate</th>
+                                <th>IP Address</th>
+                                <th>Vote ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Recent voting records will be populated via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="viewResults" class="section">
+                <h2><i class="fas fa-chart-bar"></i> Voting Results</h2>
+                <div class="results-controls">
+                    <select id="resultsEventSelect" onchange="loadEventResults(this.value)">
+                        <option value="">Select voting event</option>
+                    </select>
+                    <button onclick="exportResults()" class="btn-export">
+                        <i class="fas fa-download"></i> Export Results
+                    </button>
+                    <button onclick="publishResults()" class="btn-publish">
+                        <i class="fas fa-bullhorn"></i> Publish Results
+                    </button>
+                </div>
+                
+                <div id="resultsContainer">
+                    <!-- Voting results will be loaded via JavaScript -->
+                </div>
+            </div>
+            
+            <div id="voteRecords" class="section">
+                <h2><i class="fas fa-history"></i> All Voting Records</h2>
+                <div class="vote-records-list">
+                    <table id="allVotesTable">
+                        <thead>
+                            <tr>
+                                <th>Record ID</th>
+                                <th>Voter</th>
+                                <th>Candidate</th>
+                                <th>Voting Time</th>
+                                <th>IP Address</th>
+                                <th>Event ID</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- All voting records will be populated via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="userManagement" class="section">
+                <h2><i class="fas fa-user-cog"></i> User Management</h2>
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Registration Time</th>
+                            <th>Vote Count</th>
+                            <th>Last Vote</th>
+                            <th>Admin</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- User list will be populated via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div id="deleteEventModal" class="confirm-delete-modal">
+        <div class="confirm-delete-content">
+            <h3><i class="fas fa-exclamation-triangle" style="color: #ff416c; margin-right: 10px;"></i> Confirm Delete Voting Event</h3>
+            <p>Are you sure you want to delete voting event <strong id="deleteEventTitle">"Event Title"</strong>?</p>
+            
+            <div class="event-delete-options">
+                <p><strong>Delete Options:</strong></p>
+                <div class="delete-option">
+                    <input type="radio" id="deleteOption1" name="deleteOption" value="eventOnly" checked>
+                    <label for="deleteOption1">Delete event only (keep candidate data)</label>
+                </div>
+                <div class="delete-option">
+                    <input type="radio" id="deleteOption2" name="deleteOption" value="eventWithCandidates">
+                    <label for="deleteOption2">Delete event and associated candidates</label>
+                </div>
+                <div class="delete-option">
+                    <input type="radio" id="deleteOption3" name="deleteOption" value="eventWithAllData">
+                    <label for="deleteOption3">Delete event and all related data (including voting records)</label>
+                </div>
+            </div>
+            
+            <div class="warning" style="color: #ff416c; font-weight: bold; margin: 15px 0; padding: 10px; background: #fff5f5; border-radius: 4px; border-left: 4px solid #ff416c;">
+                <i class="fas fa-exclamation-circle"></i> Warning: This operation cannot be undone!
+                <br><span id="deleteEventStats">Event contains 0 candidates, 0 voting records.</span>
+                <br><span id="deleteEventActiveWarning" style="display: none;"><strong>This is currently active event, deletion will require manually setting another event as active.</strong></span>
+            </div>
+            
+            <div class="confirm-delete-buttons">
+                <button onclick="closeDeleteEventModal()" class="btn-submit" style="background: #666;">
+                    Cancel
+                </button>
+                <button onclick="deleteEvent()" class="btn-delete">
+                    Confirm Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            
+            updateBrowserInfo();
+            
+            updateStorageStatus();
+            
+            $(document).keydown(function(e) {
+                if (e.keyCode === 27) {
+                    closeDeleteEventModal();
+                }
+            });
+
+            $(document).on('click', function(e) {
+                if ($(e.target).hasClass('confirm-delete-modal')) {
+                    closeDeleteEventModal();
+                }
+            });
+        });
+        
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            $('#currentTime').text(timeString);
+        }
+        
+        function updateBrowserInfo() {
+            const ua = navigator.userAgent;
+            let browserInfo = '';
+            
+            if (ua.indexOf("Chrome") > -1) {
+                browserInfo = 'Chrome';
+            } else if (ua.indexOf("Firefox") > -1) {
+                browserInfo = 'Firefox';
+            } else if (ua.indexOf("Safari") > -1) {
+                browserInfo = 'Safari';
+            } else if (ua.indexOf("Edge") > -1) {
+                browserInfo = 'Edge';
+            } else if (ua.indexOf("MSIE") > -1 || ua.indexOf("Trident/") > -1) {
+                browserInfo = 'Internet Explorer';
+            } else {
+                browserInfo = 'Unknown Browser';
+            }
+            
+            $('#browserInfo').text(browserInfo);
+        }
+        
+        function updateStorageStatus() {
+            try {
+                const candidates = JSON.parse(localStorage.getItem('candidates') || '[]');
+                const events = JSON.parse(localStorage.getItem('votingEvents') || '[]');
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                
+                let status = `Candidates: ${candidates.length} | Events: ${events.length} | Users: ${users.length}`;
+                $('#storageStatus').text(status);
+            } catch (e) {
+                $('#storageStatus').text('Data Exception');
+            }
+        }
+        
+        function goToHomePage() {
+            sessionStorage.setItem('from_admin', 'true');
+            window.location.href = 'home.html';
+        }
+        
+        function showDeleteEventModal(eventId) {
+            console.log('Show delete event modal:', eventId);
+        }
+        
+        function closeDeleteEventModal() {
+            $('#deleteEventModal').fadeOut(200);
+        }
+    </script>
+</body>
+</html>

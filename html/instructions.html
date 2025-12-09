@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting Instructions - Hong Kong Metropolitan University Voting System</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .instructions-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .rule-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .rule-list li {
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .rule-list li i {
+            color: var(--primary-color);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+        
+        .rule-content h4 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .rule-content p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .important-note {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-left: 4px solid var(--warning-color);
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .important-note h4 {
+            color: var(--warning-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .awards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .award-card {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .award-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .award-icon {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .award-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .award-card p {
+            color: #666;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary-color);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -35px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-color);
+        }
+        
+        .timeline-date {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .timeline-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <div class="header-top">
+                <div class="app-title">
+                    <h1><i class="fas fa-info-circle"></i> Voting Instructions</h1>
+                    <p>Detailed Voting Rules</p>
+                </div>
+                <div class="nav-menu">
+                    <a href="home.html" class="nav-btn">
+                        <i class="fas fa-home"></i> Return to Home
+                    </a>
+                    <a href="voteresult.html" class="nav-btn secondary">
+                        <i class="fas fa-chart-bar"></i> Voting Results
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="instructions-container">
+            <div class="card section">
+                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Event Introduction</h2>
+                <p style="line-height: 1.8; color: #666; font-size: 16px;">
+                    The Hong Kong Metropolitan University voting event aims to involve all students and staff in campus decision-making through fair, just, and transparent methods.
+                    This vote will determine important campus matters for the academic year. All students and staff are welcome to participate!
+                </p>
+            </div>
+
+            <div class="card section">
+                <h2 class="section-title"><i class="fas fa-book"></i> Voting Rules</h2>
+                <ul class="rule-list">
+                    <li>
+                        <i class="fas fa-user-check"></i>
+                        <div class="rule-content">
+                            <h4>Voting Eligibility</h4>
+                            <p>All current students and staff of Hong Kong Metropolitan University can participate in voting</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-sign-in-alt"></i>
+                        <div class="rule-content">
+                            <h4>Login Requirement</h4>
+                            <p>Must register an account and log in before voting</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-vote-yea"></i>
+                        <div class="rule-content">
+                            <h4>Voting Limits</h4>
+                            <p>Varies according to different voting items</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="rule-content">
+                            <h4>Fairness Principle</h4>
+                            <p>Prohibited activities like ballot stuffing. The system automatically detects abnormal voting</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-gavel"></i>
+                        <div class="rule-content">
+                            <h4>Result Validity</h4>
+                            <p>Voting results will be announced after completion. Final results are based on system statistics</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card section">
+                <h2 class="section-title"><i class="fas fa-list-ol"></i> Voting Process</h2>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h3 style="color: #333; margin-bottom: 15px;">Step 1: Register Account</h3>
+                        <p style="color: #666;">Visit registration page, complete necessary information to register</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h3 style="color: #333; margin-bottom: 15px;">Step 2: Login System</h3>
+                        <p style="color: #666;">Use registered username and password to login</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h3 style="color: #333; margin-bottom: 15px;">Step 3: View Options</h3>
+                        <p style="color: #666;">Browse information and descriptions of all voting options</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h3 style="color: #333; margin-bottom: 15px;">Step 4: Cast Vote</h3>
+                        <p style="color: #666;">Select preferred option and click vote button</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h3 style="color: #333; margin-bottom: 15px;">Step 5: View Results</h3>
+                        <p style="color: #666;">Check real-time voting results and ranking changes anytime</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="important-note">
+                <h4><i class="fas fa-exclamation-triangle"></i> Important Notes</h4>
+                <ul style="color: #666; line-height: 1.8;">
+                    <li>Please ensure to register with real and valid information</li>
+                    <li>Read voting rules carefully before voting</li>
+                    <li>Votes cannot be changed after submission, choose carefully</li>
+                    <li>Contact technical support for system issues</li>
+                    <li>Final interpretation belongs to Hong Kong Metropolitan University</li>
+                </ul>
+            </div>
+
+            <div class="text-center mt-20">
+                <a href="home.html" class="btn btn-primary" style="margin-right: 10px;">
+                    <i class="fas fa-vote-yea"></i> Start Voting
+                </a>
+                <a href="register.html" class="btn btn-success" style="margin-right: 10px;">
+                    <i class="fas fa-user-plus"></i> Register Now
+                </a>
+                <a href="login.html" class="btn">
+                    <i class="fas fa-sign-in-alt"></i> User Login
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

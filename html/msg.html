@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operation Successful - Hong Kong Metropolitan University Voting System</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .success-container {
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 80px;
+            color: var(--success-color);
+            margin-bottom: 30px;
+        }
+        
+        .success-message h1 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 36px;
+        }
+        
+        .success-message p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .success-card {
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <div class="header-top">
+                <div class="app-title">
+                    <h1><i class="fas fa-vote-yea"></i> Hong Kong Metropolitan University Voting System</h1>
+                    <p>Campus Voting Platform</p>
+                </div>
+                <div class="nav-menu">
+                    <a href="home.html" class="nav-btn">
+                        <i class="fas fa-home"></i> Return to Home
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="success-container">
+            <div class="card success-card">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                
+                <div class="success-message">
+                    <h1>Registration Successful!</h1>
+                    <p>Congratulations! Your voting system account has been successfully created</p>
+                    <p>You can now login to the system and vote for your preferred options</p>
+                    <p>Each user can vote up to 10 times per day. Please use your voting rights wisely</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <a href="login.html" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Login Now
+                    </a>
+                    <a href="home.html" class="btn btn-success">
+                        <i class="fas fa-home"></i> Return to Home
+                    </a>
+                    <a href="instructions.html" class="btn">
+                        <i class="fas fa-info-circle"></i> View Voting Instructions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

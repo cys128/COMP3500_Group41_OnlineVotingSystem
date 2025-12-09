@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hong Kong Metropolitan University Voting System</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../jquery/jquery-3.7.0.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <div class="header-top">
+                <div class="app-title">
+                    <h1><i class="fas fa-vote-yea"></i> Hong Kong Metropolitan University Voting System</h1>
+                    <p>Cast your valuable vote for your favorite options</p>
+                </div>
+                <div class="user-info">
+                    <span id="usernameDisplay">Please Login</span>
+                    <div id="userActions" class="nav-menu">
+                        <!-- Different buttons shown based on login status -->
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#candidates"><i class="fas fa-users"></i> Candidate Voting</a>
+                <a href="voteresult.html"><i class="fas fa-chart-bar"></i> Voting Results</a>
+                <a href="instructions.html"><i class="fas fa-info-circle"></i> Voting Instructions</a>
+                <a href="admin.html" id="adminLink" style="display:none;"><i class="fas fa-cog"></i> Admin Backend</a>
+            </nav>
+        </header>
+
+        <section class="voting-info">
+            <h2 class="info-title"><i class="fas fa-calendar-alt"></i> Event Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h3>Voting Start Time</h3>
+                    <p id="voteStartTime">November 1, 2025 09:00</p>
+                </div>
+                <div class="info-item">
+                    <h3>Voting End Time</h3>
+                    <p id="voteEndTime">November 19, 2025 18:00</p>
+                </div>
+                <div class="info-item">
+                    <h3>Current Status</h3>
+                    <p id="voteStatus">In Progress</p>
+                </div>
+                <div class="info-item">
+                    <h3>Remaining Days</h3>
+                    <p id="remainingDays">15 days</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="vote-stats">
+            <h2 class="stats-title"><i class="fas fa-chart-line"></i> Voting Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Votes</h3>
+                    <p id="totalVotes">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Candidates Count</h3>
+                    <p id="totalCandidates">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Today's Votes</h3>
+                    <p id="todayVotes">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Participation Rate</h3>
+                    <p id="participationRate">0%</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="candidates">
+            <h2 class="stats-title" style="color: white; margin-bottom: 20px;">
+                <i class="fas fa-star"></i> Candidate Voting
+            </h2>
+            <div class="candidates-container" id="candidatesContainer">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading candidate data...
+                </div>
+            </div>
+        </section>
+
+        <section class="voting-rules">
+            <h2 class="stats-title"><i class="fas fa-book"></i> Voting Rules</h2>
+            <ul class="rules-list">
+                <li><i class="fas fa-check-circle"></i> Votes cannot be changed after submission</li>
+                <li><i class="fas fa-check-circle"></i> Prohibited activities like ballot stuffing</li>
+                <li><i class="fas fa-check-circle"></i> Final interpretation belongs to the organizer</li>
+            </ul>
+            
+            <div class="quick-actions">
+                <button class="action-btn" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                </button>
+                <a href="voteresult.html" class="action-btn secondary">
+                    <i class="fas fa-chart-pie"></i> View Detailed Results
+                </a>
+                <a href="instructions.html" class="action-btn warning">
+                    <i class="fas fa-question-circle"></i> View Full Rules
+                </a>
+            </div>
+        </section>
+
+        <div class="floating-vote-counter">
+            <div class="vote-counter">
+                <h3>Remaining Votes</h3>
+                <p id="floatingVoteCount">0</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="notificationContainer"></div>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/home.js"></script>
+</body>
+</html>

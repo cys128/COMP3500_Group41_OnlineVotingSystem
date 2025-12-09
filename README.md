@@ -1,11 +1,11 @@
-Online Voting System (Group 41)
-Course: COMP 3500SEF
+# Online Voting System (Group 41)
 
-Group Number: 41
+**Course:** COMP 3500SEF
 
-Project Information
-An online voting system developed for COMP 35000SEF, featuring user authentication, role-based access (Admin/Voter), and real-time voting analytics.
+**Group Number:** 41
 
-Group Members:
+## Project Information
+An online voting system developed for COMP 35000SEF
 
-Student Name: Ngan Chiu Ki (SID: 14226245)
+**Group Members:**
+* **Student Name:** Chen Yuk San (SID: 14239843)

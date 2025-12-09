@@ -9,6 +9,10 @@ An online voting system developed for COMP 35000SEF
 
 **Group Members:**
 * **Student Name:** Chen Yuk San (SID: 14239843)
+* **Student Name:** Chan Lik Ho (SID: 14107244)
+* **Student Name:** Ng Tsz Hin (SID: 14172320)
+* **Student Name:** Lau Ngai Chun (SID: 14088458)
+* **Student Name:** Leung Chun Hei (SID: 14094011)
 
 ## How to run  it
 * Open  the file in  VotingSystem\html\home
@@ -23,6 +27,7 @@ An online voting system developed for COMP 35000SEF
 * Preset Voter:
 `Username: user1`
 `Password: 123456`
+
 
 
 

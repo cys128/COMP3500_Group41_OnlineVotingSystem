@@ -9,3 +9,6 @@ An online voting system developed for COMP 35000SEF
 
 **Group Members:**
 * **Student Name:** Chen Yuk San (SID: 14239843)
+
+## How to run  it
+Open  the file VotingSystem\html\home

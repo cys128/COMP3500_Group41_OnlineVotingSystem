@@ -16,6 +16,7 @@ An online voting system developed for COMP 35000SEF
 * **Student Name:** Fung Tsz Chung (SID: 14217297)
 * **Student Name:** Ngan Chiu Ki (SID: 14226245)
 * **Student Name:** Cheung Pak Lam (SID: 14196119)
+* **Student Name:** Sze Yan Yu (SID: 14166430)
 
 ## How to run  it
 * Open  the file in  `VotingSystem\html\home`
@@ -30,6 +31,7 @@ An online voting system developed for COMP 35000SEF
 * Preset Voter:
 `Username: user1`
 `Password: 123456`
+
 
 
 
